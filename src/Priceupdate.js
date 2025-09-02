@@ -21,7 +21,6 @@ export default function Priceupdate() {
   const [category, setCategory] = useState(null);
   const [date, setDate] = useState(null);
 
-  // Extra fields for Income / Transfer
   const [incomeSource, setIncomeSource] = useState("");
   const [transferTo, setTransferTo] = useState("");
 
