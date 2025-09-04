@@ -8,7 +8,7 @@ const { Title, Paragraph } = Typography;
 const SegmentedCard = () => {
   const [currentView, setCurrentView] = useState("Expense");
 
-  const contentMap = {
+  const contentMap = {  
     Expense: <Expense />,
     Income: <Income />,
     transfer: <Transfer />,

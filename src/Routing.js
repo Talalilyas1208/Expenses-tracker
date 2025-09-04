@@ -2,6 +2,7 @@ import App from "./App";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Priceupdate from "./Priceupdate";
 import Previous from "./Previous";
+import Calendar123 from "./Compenets/Calendar123";
 export default function Routing() {
   return (
     <Routes>
@@ -9,6 +10,9 @@ export default function Routing() {
       <Route path="/priceupdate" element={<Priceupdate />} />
       {/* <Route path="/lecturerlogin" element={<Lecturerlogin />} />  */}
       <Route path="/previoustransaction" element={<Previous />} />
+
+
+      <Route   path="/calendar" element = {<Calendar123/>} />
     </Routes>
   );
 }
