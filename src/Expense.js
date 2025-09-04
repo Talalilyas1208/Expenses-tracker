@@ -1,4 +1,5 @@
-import { Input, Row, Col, Typography, Spin, Button, Modal } from "antd";
+
+import { Row, Col, Typography, Spin, Modal, notification } from "antd";
 import { useState } from "react";
 import InputField from "./Compenets/Input";
 import Selected from "./Compenets/Select";
@@ -11,24 +12,22 @@ const { Text } = Typography;
 export default function Expense() {
   const [selectedCat, setSelectedCat] = useState(null);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
- const [state ,setstate]  =useState ()
-  // API call for categories
+  const [amount, setAmount] = useState("");
+  const [description, setDescription] = useState("");
+  const [day, setday] = useState(null);
+
   const { data: catData, loading: catLoading } = useFetch(
     "http://localhost:8080/catg"
   );
-
-  const [day, setday] = useState(null);
   const { data: dayData, loading: dayLoading } = useFetch(
     "http://localhost:8080/day"
   );
-
   const navigate = useNavigate();
 
   const categoryOptions =
     catData?.map((cat) => ({
       value: cat.catg,
     })) || [];
-
   const dayOption =
     dayData?.map((d) => ({
       value: d.day,
@@ -38,14 +37,63 @@ export default function Expense() {
   const handleCalendarClick = () => {
     setIsCalendarOpen(true);
   };
-function handleClick (){
-
-  setstate("this is save")
-}
 
   const handleDateSelect = (date) => {
     setday(date.format("YYYY-MM-DD"));
     setIsCalendarOpen(false);
+  };
+
+  // The new function to handle saving the data
+  const handleSave = async () => {
+    // 1. Validate the form data
+    if (!amount || !description || !selectedCat || !day) {
+      notification.error({
+        message: "Validation Error",
+        description: "Please fill in all the required fields.",
+      });
+      return;
+    }
+
+    const expenseData = {
+      amount,
+      description,
+      category: selectedCat,
+      date: day,
+    };
+
+    try {
+      // 2. Make the API request to save the data
+      const response = await fetch("http://localhost:8080/expenses", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(expenseData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to save expense");
+      }
+
+      // 3. Show a success notification
+      notification.success({
+        message: "Success!",
+        description: "Expense has been successfully saved.",
+      });
+
+      // Optional: Clear the form after a successful save
+      setAmount("");
+      setDescription("");
+      setSelectedCat(null);
+      setday(null);
+      
+    } catch (error) {
+      // 4. Show an error notification
+      notification.error({
+        message: "Error",
+        description: error.message || "Something went wrong. Please try again.",
+      });
+    }
   };
 
   return (
@@ -55,13 +103,23 @@ function handleClick (){
       <Row gutter={16}>
         <Col lg={12} xs={24}>
           <Text strong>Amount</Text>
-          <InputField type="number" placeholder="0.00 USD" />
+          <InputField
+            type="number"
+            placeholder="0.00 USD"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+          />
         </Col>
         <Col lg={12} xs={24}>
           <Text strong>Description</Text>
-          <InputField placeholder="Bought a new iPhone" />
+          <InputField
+            placeholder="Bought a new iPhone"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
         </Col>
       </Row>
+
       <Text strong>Category</Text>
       <Row style={{ marginTop: "10px", marginBottom: "20px" }}>
         <Col lg={24} xs={24}>
@@ -78,7 +136,7 @@ function handleClick (){
         </Col>
       </Row>
 
-      <Row justify={"space-between"} align="middle">
+      <Row justify="space-between" align="middle">
         <Col lg={18} xs={24}>
           <Text strong>Day</Text>
           {dayLoading ? (
@@ -88,7 +146,7 @@ function handleClick (){
               options={dayOption}
               value={day}
               onChange={(val) => setday(val)}
-              placeholder={"Today"}
+              placeholder="Select a day"
             />
           )}
         </Col>
@@ -108,17 +166,11 @@ function handleClick (){
         </Modal>
       )}
 
-
-
-
-      <Row>
-
+      <Row justify="end" style={{ marginTop: "20px" }}>
         <Col>
-         
-          
-          <Buttons type="primary" onClick={handleClick}    justify="end"style={{marginTop:"4px" ,marginRight:"5px"}}>
-    save
-    </Buttons>
+          <Buttons type="primary" onClick={handleSave}>
+            Save
+          </Buttons>
         </Col>
       </Row>
     </>

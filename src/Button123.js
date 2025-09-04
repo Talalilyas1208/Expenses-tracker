@@ -1,8 +1,8 @@
-import { Button, Flex, Tooltip, Row, Col, ConfigProvider } from "antd";
-import Priceupdate from "./Priceupdate";
+import { Button, Row, Col, ConfigProvider } from "antd";
+
 
 import { useNavigate } from "react-router-dom";
-import Previous from "./Previous";
+
 export default function Button1() {
   const navigate = useNavigate();
 
