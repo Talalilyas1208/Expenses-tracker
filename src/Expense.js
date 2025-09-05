@@ -7,6 +7,7 @@ import useFetch from "./Hooks/hookfetchdata";
 import Calendar123 from "./Compenets/Calendar123";
 import { useNavigate } from "react-router-dom";
 import Buttons from "./Compenets/Buttons";
+import { CalendarOutlined } from '@ant-design/icons';
 const { Text } = Typography;
 
 export default function Expense() {
@@ -87,8 +88,8 @@ export default function Expense() {
       setSelectedCat(null);
       setday(null);
       
-    } catch (error) {
-      // 4. Show an error notification
+    } catch (error) { 
+   
       notification.error({
         message: "Error",
         description: error.message || "Something went wrong. Please try again.",
@@ -151,7 +152,7 @@ export default function Expense() {
           )}
         </Col>
         <Col lg={6} xs={24} style={{ marginTop: "20px" }}>
-          <Buttons onClick={handleCalendarClick}>Open Calendar</Buttons>
+          <Buttons onClick={handleCalendarClick}>    <CalendarOutlined /></Buttons>
         </Col>
       </Row>
 

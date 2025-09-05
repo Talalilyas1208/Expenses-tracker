@@ -1,9 +1,11 @@
-// src/Components/InputField.jsx
-import { useState } from "react";
-import { Input, Button } from "antd";
 
-export default function InputField({ type ,placeholder}) {
+import { Input } from "antd";
 
+
+export default function InputField(props) {
+ 
+
+   const {type,placeholder} = props ;
 return(
 
    <Input
