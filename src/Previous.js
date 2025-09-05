@@ -1,14 +1,36 @@
 import { useEffect, useState } from "react";
 import { Row, Col, Flex, Spin, Alert, Table } from "antd";
-import useLocalStorage from "./Hooks/Uselocalstorage";
-import useFetch from "./Hooks/hookfetchdata";
 
 export default function Previous() {
-  // const [loading, setLoading] = useState(true);
-  // const [error, setError] = useState(null);
-  // const [data, setData] = useState([]);
-  
-const {data,loading,error } = useFetch("http://localhost:8080/expense")
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchdata = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch("http://localhost:8080/expense");
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log("Data received and being set to state:", result);
+
+        setData(result);
+        setError(null);
+      } catch (error) {
+        setError(error.message);
+        console.error("Could not fetch the data:", error); 
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchdata();
+  }, []);
 
   const columns = [
     {

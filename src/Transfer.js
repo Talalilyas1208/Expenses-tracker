@@ -1,14 +1,6 @@
-import { Input } from "antd"
+import { Input } from "antd";
 
-const Transfer = () =>{
-
-
-
-    return(
-
-
-
-        <Input type="text"></Input>
-    )
-}
-export default Transfer ;
+const Transfer = () => {
+  return <Input type="text"></Input>;
+};
+export default Transfer;

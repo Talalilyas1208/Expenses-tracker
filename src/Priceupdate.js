@@ -3,7 +3,7 @@ import { Card, Segmented, Typography, List, ConfigProvider, theme } from "antd";
 import Expense from "./Expense";
 import Income from "./Income";
 import Transfer from "./Transfer";
-const { Title, Paragraph } = Typography;
+
 
 const SegmentedCard = () => {
   const [currentView, setCurrentView] = useState("Expense");
