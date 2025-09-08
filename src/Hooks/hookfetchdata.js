@@ -33,7 +33,7 @@ const useFetch = (url) => {
        method === "POST" ? setPostLoading(false) : setLoading(false);
     }
   
-  })
+  },)
   useEffect(() => {
     
   }, [handleRequest]);
