@@ -44,9 +44,7 @@ export default function Expense() {
     setIsCalendarOpen(false);
   };
 
-  // The new function to handle saving the data
   const handleSave = async () => {
-    // 1. Validate the form data
     if (!amount || !description || !selectedCat || !day) {
       notification.error({
         message: "Validation Error",
@@ -63,7 +61,7 @@ export default function Expense() {
     };
 
     try {
-      // 2. Make the API request to save the data
+ 
       const response = await fetch("http://localhost:8080/expenses", {
         method: "POST",
         headers: {
@@ -75,14 +73,10 @@ export default function Expense() {
       if (!response.ok) {
         throw new Error("Failed to save expense");
       }
-
-      // 3. Show a success notification
       notification.success({
         message: "Success!",
         description: "Expense has been successfully saved.",
       });
-
-      // Optional: Clear the form after a successful save
       setAmount("");
       setDescription("");
       setSelectedCat(null);
