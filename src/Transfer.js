@@ -26,9 +26,9 @@ const Transfer = () => {
 
   return (
     <>
-      <Text strong>Bank</Text>
       <Row style={{ marginTop: "10px", marginBottom: "20px" }}>
-        <Col lg={12} xs={24}>
+        <Col lg={11} xs={24}>
+          <Text strong>Bank</Text>
           {transferLoading ? (
             <Spin />
           ) : (
@@ -39,13 +39,8 @@ const Transfer = () => {
             />
           )}
         </Col>
-
-
-      
-        <Col lg={12} xs={24}>
-
-
-     
+        <Col lg={12} xs={24} offset={1}>
+          <Text strong>Amount</Text>
           {amountLoading ? (
             <Spin />
           ) : (
@@ -58,6 +53,7 @@ const Transfer = () => {
         </Col>
       </Row>
 
+    
     </>
   );
 };
