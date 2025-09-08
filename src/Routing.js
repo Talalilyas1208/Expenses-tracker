@@ -8,11 +8,8 @@ export default function Routing() {
     <Routes>
       <Route path="/" element={<App />} />
       <Route path="/priceupdate" element={<Priceupdate />} />
-      {/* <Route path="/lecturerlogin" element={<Lecturerlogin />} />  */}
       <Route path="/previoustransaction" element={<Previous />} />
-
-
-      <Route   path="/calendar" element = {<Calendar123/>} />
+      <Route path="/calendar" element={<Calendar123 />} />
     </Routes>
   );
 }
