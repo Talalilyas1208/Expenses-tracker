@@ -52,7 +52,21 @@ const Transfer = () => {
           )}
         </Col>
       </Row>
-
+      
+      <Row style={{ marginTop: "10px", marginBottom: "20px" }}>
+        <Col lg={6} xs={24}>
+          <Text strong>Bank</Text>
+          {transferLoading ? (
+            <Spin />
+          ) : (
+            <Select
+              options={transferOptions}
+              placeholder="Select bank"
+              style={{ width: "100%" }}
+            />
+          )}
+        </Col>
+        </Row>
     
     </>
   );
