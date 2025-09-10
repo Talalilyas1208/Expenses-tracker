@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Card, Segmented, Typography, List, ConfigProvider, theme } from "antd";
+import React, { cloneElement, useState } from "react";
+import { Card, Segmented, Typography, List, ConfigProvider, theme ,Row,Col} from "antd";
 import Expense from "./Expense";
 import Income from "./Income";
 import Transfer from "./Transfer";
@@ -16,6 +16,11 @@ const SegmentedCard = () => {
 
   return (
     <ConfigProvider theme={{ algorithm: theme.darkAlgorithm }}>
+
+
+      <Row justify={"center"}>  
+        <Col  lg={5} xl={7}>
+        
       <Card
         title={
           <Segmented
@@ -28,6 +33,8 @@ const SegmentedCard = () => {
       >
         <div style={{ marginTop: 16 }}>{contentMap[currentView]}</div>
       </Card>
+      </Col>
+      </Row>
     </ConfigProvider>
   );
 };
