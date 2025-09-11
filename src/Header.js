@@ -1,55 +1,52 @@
-import React from 'react';
-import { Space, Typography } from 'antd';
-import { LeftOutlined } from '@ant-design/icons';
+import React from "react";
+import { Space, Typography } from "antd";
+import { LeftOutlined } from "@ant-design/icons";
 import { Button, Row, Col, ConfigProvider } from "antd";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
-export  default function Header(){
- 
- const { Title, Text } = Typography; 
+export default function Header() {
+  const { Title, Text } = Typography;
+  const navigate = useNavigate();
 
- function handleClick() {
+  function handleAddWalletClick() {
     navigate("/priceupdate");
   }
-  function click() {
+
+  function handlePreviousTransactionClick() {
     navigate("/previoustransaction");
   }
-    const navigate = useNavigate();
- 
- 
- 
 
-return (
+  return (
+    <Row align="middle" justify="space-between">
 
+      
 
-<Row> 
-  <Col>
- <Space className="site-page-header" style={{ alignItems: 'center' }}>
-    <LeftOutlined onClick={() => null} />
-    <Space direction="vertical">
-      <Title level={4} style={{ margin: 0 }}>Title</Title>
-      <Text style={{ margin: 0 }}>This is a subtitle</Text>
-    </Space>
-      </Space>
-    </Col>
-    <Col >
-     <Button
-            type="primary"
-            onClick={handleClick}
-            justify="end"
-            style={{ marginTop: "4px", marginRight: "5px" }}
-          >
-            Add wallet
-          </Button>
-          <Button
-            type="primary"
-            onClick={click}
-            justify="end"
-            style={{ marginTop: "4px" }}
-          >
-            previous transaction
-          </Button>
-</Col>
-  </Row>
-)
+    
+      <Col flex="auto">
+        <ConfigProvider
+          theme={{
+            token: {
+              colorPrimary: "black",
+            },
+          }}
+        >
+          <Row justify="end">
+            <Button
+              type="primary"
+              onClick={handleAddWalletClick}
+              style={{ marginRight: "5px" }}
+            >
+              Add wallet
+            </Button>
+            <Button
+              type="primary"
+              onClick={handlePreviousTransactionClick}
+            >
+              previous transaction
+            </Button>
+          </Row>
+        </ConfigProvider>
+      </Col>
+    </Row>
+  );
 }
