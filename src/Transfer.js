@@ -54,7 +54,7 @@ const Transfer = () => {
       </Row>
       
       <Row style={{ marginTop: "10px", marginBottom: "20px" }}>
-        <Col lg={6} xs={24}>
+        <Col lg={11} xs={24}>
           <Text strong>Bank</Text>
           {transferLoading ? (
             <Spin />
