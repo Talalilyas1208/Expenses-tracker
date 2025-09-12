@@ -1,52 +1,23 @@
-import React from "react";
-import { Space, Typography } from "antd";
-import { LeftOutlined } from "@ant-design/icons";
-import { Button, Row, Col, ConfigProvider } from "antd";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Button, Row, Col ,ConfigProvider,theme} from "antd";
+import DashboardModal from "./DashboardModal";
 
 export default function Header() {
-  const { Title, Text } = Typography;
-  const navigate = useNavigate();
-
-  function handleAddWalletClick() {
-    navigate("/priceupdate");
-  }
-
-  function handlePreviousTransactionClick() {
-    navigate("/previoustransaction");
-  }
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <Row align="middle" justify="space-between">
+    <>
+      <Row justify="end" style={{ padding: "10px" }}>
+        <Col>   
 
-      
+          <Button  color="default" type="default"  variant="solid" onClick={() => setIsModalOpen(true)}>
+            Add Transaction
+          </Button>
+          
+        </Col>
+      </Row>
 
-    
-      <Col flex="auto">
-        <ConfigProvider
-          theme={{
-            token: {
-              colorPrimary: "black",
-            },
-          }}
-        >
-          <Row justify="end">
-            <Button
-              type="primary"
-              onClick={handleAddWalletClick}
-              style={{ marginRight: "5px" }}
-            >
-              Add wallet
-            </Button>
-            <Button
-              type="primary"
-              onClick={handlePreviousTransactionClick}
-            >
-              previous transaction
-            </Button>
-          </Row>
-        </ConfigProvider>
-      </Col>
-    </Row>
+      <DashboardModal open={isModalOpen} onClose={() => setIsModalOpen(false)} />
+    </>
   );
 }
