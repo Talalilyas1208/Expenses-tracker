@@ -1,174 +1,245 @@
-import { Row, Col, Typography, Spin, Modal, notification } from "antd";
-import { useState } from "react";
-import InputField from "./Compenets/Input";
-import Selected from "./Compenets/Select";
-import useFetch from "./Hooks/hookfetchdata";
-import Calendar123 from "./Compenets/Calendar123";
-import { useNavigate } from "react-router-dom";
-import Buttons from "./Compenets/Buttons";
-const { Text } = Typography;
+import React, { useState, useEffect } from "react";
+import { 
+  Row, 
+  Col, 
+  Typography, 
+  Button, 
+  Input, 
+  Select, 
+  notification, 
+  Card,
+  Space,
+  Divider,
+  Tag,
+  List,
+  Statistic
+} from "antd";
+import { 
+  DollarCircleOutlined, 
+  SaveOutlined, 
+  PlusOutlined,
+  InfoCircleOutlined 
+} from '@ant-design/icons';
+
+const { Text, Title } = Typography;
 
 export default function Income() {
-  const [selectedCat, setSelectedCat] = useState(null);
-  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const [amount, setAmount] = useState("");
+  // input and totals
+  const [inputAmount, setInputAmount] = useState("");
+  const [total, setTotal] = useState(0);
+  const [entries, setEntries] = useState([]);
+
+  // other fields
   const [description, setDescription] = useState("");
-  const [day, setday] = useState(null);
+  const [selectedCat, setSelectedCat] = useState(null);
+  const [day, setDay] = useState(null);
 
-  const { data: catData, loading: catLoading } = useFetch(
-    "http://localhost:8080/catg"
-  );
-  const { data: dayData, loading: dayLoading } = useFetch(
-    "http://localhost:8080/day"
-  );
+  // Mock data for testing
+  const categoryOptions = [
+    { value: "salary", label: "Salary" },
+    { value: "bonus", label: "Bonus" },
+    { value: "freelance", label: "Freelance" },
+    { value: "investment", label: "Investment" },
+    { value: "other", label: "Other" }
+  ];
 
-
-  const categoryOptions =
-    catData?.map((cat) => ({
-      value: cat.catg,
-    })) || [];
-  const dayOption =
-    dayData?.map((d) => ({
-      value: d.day,
-      label: d.day,
-    })) || [];
-
-  const handleCalendarClick = () => {
-    setIsCalendarOpen(true);
+  // handle amount change with better debugging
+  const handleAmountChange = (e) => {
+    const val = e.target.value;
+    console.log("Raw input value:", val);
+    
+    // Regex to allow only numbers and a single decimal point
+    const sanitizedVal = val.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
+    console.log("Sanitized value:", sanitizedVal);
+    
+    setInputAmount(sanitizedVal);
   };
 
-  const handleDateSelect = (date) => {
-    setday(date.format("YYYY-MM-DD"));
-    setIsCalendarOpen(false);
-  };
-
-
-  const handleSave = async () => {
-
-    if (!amount || !description || !selectedCat || !day) {
-        setAmount
-        ("please enter the amount");
-        setDescription("please enter the description ");
-
-        setSelectedCat("please select the catg")
+  const handleSaving = () => {
+    console.log("Save button clicked!");
+    console.log("Current inputAmount:", inputAmount);
+    
+    // convert to number
+    const value = parseFloat(String(inputAmount).trim());
+    console.log("Parsed value:", value);
+    
+    if (isNaN(value) || value <= 0) {
+      notification.error({ 
+        message: "Invalid amount", 
+        description: "Please enter a valid positive number.",
+        placement: "topRight"
+      });
       return;
     }
 
-    const expenseData = {
-      amount,
-      description,
-      category: selectedCat,
-      date: day,
-    };
+    // safely update total and entries
+    setTotal((prev) => {
+      const updated = prev + value;
+      console.log("Updated total (inside updater):", updated);
+      return updated;
+    });
 
-    try {
-      const response = await fetch("http://localhost:8080/expenses", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(expenseData),
-      });
+    setEntries((prev) => {
+      const newEntry = {
+        id: Date.now(),
+        amount: value,
+        description: description || "No description",
+        category: selectedCat || "Uncategorized",
+        date: new Date().toLocaleDateString(),
+        time: new Date().toLocaleTimeString()
+      };
+      console.log("Adding new entry:", newEntry);
+      return [...prev, newEntry];
+    });
+    setInputAmount("");
+    setDescription("");
+    setSelectedCat(null);
+    setDay(null);
 
-      if (!response.ok) {
-        throw new Error("Failed to save expense");
-      }
-
-
-      setAmount("");
-      setDescription("");
-      setSelectedCat(null);
-      setday(null);
-    } catch (error) {
-      notification.error({
-        message: "Error",
-        description: error.message || "Something went wrong. Please try again.",
-      });
-    }
+    notification.success({ 
+      message: "Entry Saved Successfully!", 
+      description: `Added ${value.toFixed(2)} to your income`,
+      placement: "topRight",
+      duration: 3
+    });
   };
-
+  useEffect(() => {
+    console.log("Total changed (useEffect):", total);
+  }, [total]);
+  useEffect(() => {
+    console.log("Entries changed:", entries);
+  }, [entries]);
   return (
-    <>
-      <h3>Expense Form</h3>
+    <div>
+      <Title level={4} style={{ marginBottom: 24, color: '#1890ff' }}>
+        <DollarCircleOutlined /> Income Tracker
+      </Title>
 
-      <Row gutter={16}>
-        <Col lg={12} xs={24}>
-          <Text strong>Amount</Text>
-          <InputField
-            type="number"
-            placeholder="0.00 USD"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
+      <Card title="Add New Income Entry" style={{ marginBottom: 24 }}>
+        <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+          <Row gutter={16}>
+            <Col lg={12} xs={24}>
+              <Text strong>Amount *</Text>
+              <Input
+                size="large"
+                type="text"
+                placeholder="Enter amount (e.g., 1000.50)"
+                value={inputAmount}
+                onChange={handleAmountChange}
+                prefix={<DollarCircleOutlined style={{ color: '#52c41a' }} />}
+                style={{ marginTop: 4 }}
+              />
+              <Text type="secondary" style={{ fontSize: '12px' }}>
+                Current: "{inputAmount}"
+              </Text>
+            </Col>
 
-    />
-        </Col>
-        <Col lg={12} xs={24}>
-          <Text strong>Description</Text>
-          <InputField
-            placeholder="Bought a new iPhone"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            rules={[
-                { required: true, message: "Please enter your username!" },
-              ]}
-            
-          />
-        </Col>
-      </Row>
+            <Col lg={12} xs={24}>
+              <Text strong>Description</Text>
+              <Input
+                size="large"
+                placeholder="e.g., Monthly Salary, Freelance Project"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                style={{ marginTop: 4 }}
+              />
+            </Col>
+          </Row>
 
-      <Text strong>Category</Text>
-      <Row style={{ marginTop: "10px", marginBottom: "20px" }}>
-        <Col lg={24} xs={24}>
-          {catLoading ? (
-            <Spin />
-          ) : (
-            <Selected
-              options={categoryOptions}
-              value={selectedCat}
-              onChange={(val) => setSelectedCat(val)}
-              placeholder="Select category"
+          <Row>
+            <Col lg={12} xs={24}>
+              <Text strong>Category</Text>
+              <Select
+                size="large"
+                options={categoryOptions}
+                value={selectedCat}
+                onChange={(val) => setSelectedCat(val)}
+                placeholder="Select income category"
+                style={{ width: '100%', marginTop: 4 }}
+                allowClear
+              />
+            </Col>
+          </Row>
+
+          <Row justify="center" style={{ marginTop: 16 }}>
+            <Button 
+              type="primary" 
+              size="large"
+              icon={<SaveOutlined />}
+              onClick={handleSaving}
+              disabled={!inputAmount || inputAmount === ""}
+            >
+              Save Entry
+            </Button>
+          </Row>
+        </Space>
+      </Card>
+
+      <Card>
+        <Row gutter={16}>
+          <Col lg={12} xs={24}>
+            <Statistic
+              title="Total Income"
+              value={total}
+              precision={2}
+              valueStyle={{ color: '#52c41a', fontSize: '32px' }}
+              prefix={<DollarCircleOutlined />}
             />
-          )}
-        </Col>
-      </Row>
-
-      <Row justify="space-between" align="middle">
-        <Col lg={18} xs={24}>
-          <Text strong>Day</Text>
-          {dayLoading ? (
-            <Spin />
-          ) : (
-            <Selected
-              options={dayOption}
-              value={day}
-              onChange={(val) => setday(val)}
-              placeholder="Select a day"
+          </Col>
+          <Col lg={12} xs={24}>
+            <Statistic
+              title="Number of Entries"
+              value={entries.length}
+              valueStyle={{ color: '#1890ff' }}
+              prefix={<PlusOutlined />}
             />
-          )}
-        </Col>
-        <Col lg={6} xs={24} style={{ marginTop: "20px" }}>
-          <Buttons onClick={handleCalendarClick}>Open Calendar</Buttons>
-        </Col>
-      </Row>
+          </Col>
+        </Row>
 
-      {isCalendarOpen && (
-        <Modal
-          title="Select a Date"
-          open={isCalendarOpen}
-          onCancel={() => setIsCalendarOpen(false)}
-          footer={null}
-        >
-          <Calendar123 onSelect={handleDateSelect} />
-        </Modal>
-      )}
+        {entries.length > 0 && (
+          <>
+            <Divider orientation="left">Recent Entries</Divider>
+            <List
+              size="small"
+              dataSource={entries.slice().reverse()}
+              renderItem={(entry, index) => (
+                <List.Item
+                  key={entry.id}
+                  actions={[
+                    <Tag color="green">${entry.amount.toFixed(2)}</Tag>
+                  ]}
+                >
+                  <List.Item.Meta
+                    title={
+                      <Space>
+                        <Text strong>{entry.description}</Text>
+                        <Tag color="blue">{entry.category}</Tag>
+                      </Space>
+                    }
+                    description={`Added on ${entry.date} at ${entry.time}`}
+                  />
+                </List.Item>
+              )}
+            />
+          </>
+        )}
+      </Card>
 
-      <Row justify="end" style={{ marginTop: "20px" }}>
-        <Col>
-          <Buttons type="primary" onClick={handleSave}>
-            Save
-          </Buttons>
-        </Col>
-      </Row>
-    </>
+      {/* Debug Panel */}
+      <Card 
+        size="small" 
+        title={<><InfoCircleOutlined /> Debug Information</>} 
+        style={{ marginTop: 16 }}
+        type="inner"
+      >
+        <Space direction="vertical" size="small">
+          <Text code>Input Amount: "{inputAmount}"</Text>
+          <Text code>Entries Count: {entries.length}</Text>
+          <Text code>Current Total: ${total.toFixed(2)}</Text>
+          <Text code>Selected Category: {selectedCat || 'None'}</Text>
+          <Text code>Description: {description || 'Empty'}</Text>
+        </Space>
+      </Card>
+    </div>
   );
 }
