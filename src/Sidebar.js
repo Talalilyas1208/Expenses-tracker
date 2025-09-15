@@ -18,14 +18,14 @@ const Sidebar = () => {
   const { data, loading } = useFetch("http://localhost:8080/sidebar");
   const navigate = useNavigate();
 
-  const siderStyle = {
-    overflow: "auto",
-    height: "100vh",
-    position: "fixed",
-    left: 0,
-    top: 0,
-    bottom: 0,
-  };
+    // const siderStyle = {
+    //   overflow: "auto",
+    //   height: "100vh",
+    //   position: "fixed",
+    //   left: 0,
+    //   top: 0,
+    //   bottom: 0,
+    // };
 
   const iconMap = {
     UserOutlined: <UserOutlined />,
@@ -46,13 +46,17 @@ const Sidebar = () => {
     })) || [];
 
   return (
+
     <Sider
-      style={{ ...siderStyle, background: "#000000" }}
+      // Use this style instead for a dark theme and default behavior
+      style={{ background: "#000000" }}
       collapsible
       collapsed={collapsed}
       onCollapse={(value) => setCollapsed(value)}
       breakpoint="lg"
     >
+      {/* ... rest of your sidebar code ... */}
+
       {!collapsed && (
         <div
           className="flex items-center justify-center h-16 text-white text-2xl font-semibold"
