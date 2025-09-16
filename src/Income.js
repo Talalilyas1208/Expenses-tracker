@@ -1,7 +1,18 @@
 // Income.jsx
 import React, { useState } from "react";
-import { Card, Row, Col, Typography, Button, Input, Select, Space, message } from "antd";
+import {
+  Card,
+  Row,
+  Col,
+  Typography,
+  Button,
+  Input,
+  Select,
+  Space,
+  message,
+} from "antd";
 import { DollarCircleOutlined, SaveOutlined } from "@ant-design/icons";
+import useFetch from "./Hooks/hookfetchdata";
 
 const { Text } = Typography;
 
@@ -10,13 +21,10 @@ export default function Income({ onSave }) {
   const [description, setDescription] = useState("");
   const [selectedCat, setSelectedCat] = useState(null);
 
-  const categoryOptions = [
-    { value: "salary", label: "Salary" },
-    { value: "bonus", label: "Bonus" },
-    { value: "freelance", label: "Freelance" },
-    { value: "investment", label: "Investment" },
-    { value: "other", label: "Other" },
-  ];
+  const { data, loading } = useFetch("http://localhost:8080/income");
+
+  // API already returns { value, label }
+  const categoryOptions = data ?? [];
 
   const handleAmountChange = (e) => {
     const val = e.target.value
@@ -47,7 +55,10 @@ export default function Income({ onSave }) {
       message.success("Entry saved");
     } else {
       // fallback: just log (prevents crash when Income rendered standalone)
-      console.warn("onSave not provided for Income component, entry:", newEntry);
+      console.warn(
+        "onSave not provided for Income component, entry:",
+        newEntry
+      );
       message.info("onSave not wired — entry logged to console.");
     }
 
@@ -93,6 +104,7 @@ export default function Income({ onSave }) {
               placeholder="Select income category"
               style={{ width: "100%" }}
               allowClear
+              loading={loading}
             />
           </Col>
         </Row>

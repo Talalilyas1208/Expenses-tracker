@@ -5,7 +5,6 @@
   import Selected from "./Compenets/Select";
   import useFetch from "./Hooks/hookfetchdata";
   import Calendar123 from "./Compenets/Calendar123";
-  import { useNavigate } from "react-router-dom";
   import Buttons from "./Compenets/Buttons";
   import { CalendarOutlined } from '@ant-design/icons';
   const { Text } = Typography;
@@ -23,7 +22,7 @@
     const { data: dayData, loading: dayLoading } = useFetch(
       "http://localhost:8080/day"
     );
-    const navigate = useNavigate();
+
 
     const categoryOptions =
       catData?.map((cat) => ({
@@ -60,35 +59,13 @@
         date: day,
       };
 
-      try {
-  
-        const response = await fetch("http://localhost:8080/expenses", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(expenseData),
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to save expense");
-        }
-        notification.success({
-          message: "Success!",
-          description: "Expense has been successfully saved.",
-        });
+     
         setAmount("");
         setDescription("");
         setSelectedCat(null);
         setday(null);
         
-      } catch (error) { 
-    
-        notification.error({
-          message: "Error",
-          description: error.message || "Something went wrong. Please try again.",
-        });
-      }
+
     };
 
     return (
