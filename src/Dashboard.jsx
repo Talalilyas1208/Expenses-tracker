@@ -1,25 +1,34 @@
+// Dashboard.js
+import {
+  Button,
+  Card,
+  Row,
+  Col,
+  Statistic,
+  List,
+  Typography,
+  Space,
 
-import { Button, Card, Row, Col, Statistic, List, Typography, Space } from "antd";
+} from "antd";
+  import { CheckOutlined } from '@ant-design/icons';
+import {  DiamondOutlined } from '@ant-design/icons';
 import { DollarCircleOutlined, WalletOutlined } from "@ant-design/icons";
+import { useEntries } from "./EntriesContext";
+import useFetch from "./Hooks/hookfetchdata";
 
-import { useOutletContext } from "react-router-dom"; // Import the hook
-
-const { Text, Title } = Typography;
+const { Text } = Typography;
 
 export default function Dashboard() {
-  // Use the hook to get the entries from the parent (App) component
-  const { entries } = useOutletContext();
-
-  // Calculate total income
+  const { entries } = useEntries();
+  console.log(entries, "data");
   const totalIncome = entries.reduce((sum, entry) => sum + entry.amount, 0);
-
-  // Get recent entries (last 5)
   const recentEntries = entries.slice(-5).reverse();
+  const { data, loading } = useFetch("http://localhost:8080/Subs");
 
+  const categoryOptions = data ?? [];
   return (
     <div style={{ padding: "20px" }}>
       <Row gutter={[16, 16]}>
-        {/* Income Statistics Card */}
         <Col xs={24} sm={12} lg={8}>
           <Card hoverable>
             <Statistic
@@ -32,7 +41,6 @@ export default function Dashboard() {
           </Card>
         </Col>
 
-        {/* Number of Transactions Card */}
         <Col xs={24} sm={12} lg={8}>
           <Card hoverable>
             <Statistic
@@ -43,27 +51,15 @@ export default function Dashboard() {
             />
           </Card>
         </Col>
-
-        {/* Average Income Card */}
-        <Col xs={24} sm={12} lg={8}>
-          <Card hoverable>
-            <Statistic
-              title="Average Income"
-              value={entries.length > 0 ? totalIncome / entries.length : 0}
-              precision={2}
-              valueStyle={{ color: "#722ed1" }}
-              prefix={<DollarCircleOutlined />}
-            />
-          </Card>
-        </Col>
       </Row>
 
-      {/* Recent Transactions */}
       <Row gutter={[16, 16]}>
-        <Col span={24}>
+        <Col lg={8} sm={24} style={{ marginTop: "12px" }}>
           <Card title="Recent Income Entries">
             {entries.length === 0 ? (
-              <Text type="secondary">No income entries yet. Click "Add Transaction" to start!</Text>
+              <Text type="secondary">
+                No income entries yet. Click "Add Transaction" to start!
+              </Text>
             ) : (
               <>
                 <List
@@ -83,13 +79,16 @@ export default function Dashboard() {
                           <Space>
                             <Text type="secondary">{item.category}</Text>
                             <Text type="secondary">•</Text>
-                            <Text type="secondary">{item.date} {item.time}</Text>
+                            <Text type="secondary">
+                              {item.date} {item.time}
+                            </Text>
                           </Space>
                         }
                       />
                     </List.Item>
                   )}
                 />
+
                 {entries.length > 5 && (
                   <div style={{ textAlign: "center", marginTop: 16 }}>
                     <Text type="secondary">
@@ -99,6 +98,52 @@ export default function Dashboard() {
                 )}
               </>
             )}
+          </Card>
+        </Col>
+
+        <Col lg={8}>
+          <Card title="Your money " style={{ marginTop: "10px" }}>
+            <List
+              dataSource={[{ amount: totalIncome }]}
+              renderItem={(item) => (
+                <List.Item>
+                  <List.Item.Meta
+                    title={
+                      <Space>
+                        <Text strong style={{ color: "#52c41a" }}>
+                          ${item.amount.toFixed(1)}
+                        </Text>
+                        <Text justify="end">USD</Text>
+                      </Space>
+                    }
+                  />
+                </List.Item>
+              )}
+            />
+          </Card>
+        </Col>
+        <Col lg={8}>
+          <Card title="Your money " style={{ marginTop: "10px" }}>
+            <List
+              dataSource={categoryOptions}
+                icon= {CheckOutlined}
+              renderItem={(item) => (
+                <List.Item>
+                  <List.Item.Meta
+                  
+                    title={
+                      <Space>
+                        <Text strong type="secondary">
+                            <CheckOutlined />{item.fee}
+                        </Text>
+
+                        <Text type="secondary">{item.value}</Text>
+                      </Space>
+                    }
+                  />
+                </List.Item>
+              )}
+            />
           </Card>
         </Col>
       </Row>

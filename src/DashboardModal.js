@@ -1,4 +1,4 @@
-// DashboardModal.jsx
+
 import React, { useState } from "react";
 import { Modal, Segmented, ConfigProvider, theme } from "antd";
 import Expense from "./Expense";
