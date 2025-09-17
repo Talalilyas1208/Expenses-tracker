@@ -1,6 +1,6 @@
-// Dashboard.js
+
 import {
-  Button,
+
   Card,
   Row,
   Col,
@@ -11,7 +11,7 @@ import {
 
 } from "antd";
   import { CheckOutlined } from '@ant-design/icons';
-import {  DiamondOutlined } from '@ant-design/icons';
+
 import { DollarCircleOutlined, WalletOutlined } from "@ant-design/icons";
 import { useEntries } from "./EntriesContext";
 import useFetch from "./Hooks/hookfetchdata";
@@ -25,9 +25,14 @@ export default function Dashboard() {
   const recentEntries = entries.slice(-5).reverse();
   const { data, loading } = useFetch("http://localhost:8080/Subs");
 
+
+
+  
   const categoryOptions = data ?? [];
   return (
     <div style={{ padding: "20px" }}>
+      
+            <Text style={{ fontSize: '24px' ,marginBottom:"20px"}}>Dashboard</Text>
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={12} lg={8}>
           <Card hoverable>
