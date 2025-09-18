@@ -1,6 +1,6 @@
 // App.js
-import React, { useState, useEffect } from "react";
-import { Layout,Typography } from "antd";
+import  { useState, useEffect } from "react";
+import { Layout } from "antd";
 import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Button23 from "./Button23";
@@ -8,7 +8,7 @@ import DashboardModal from "./DashboardModal";
 import { EntriesContext } from "./EntriesContext";
 
 const { Header, Content } = Layout;
-const Text = Typography;
+
 export default function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 

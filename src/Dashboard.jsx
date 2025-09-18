@@ -10,8 +10,7 @@ export default function Dashboard() {
           colorTextSecondary: "#bfbfbf",
           colorPrimary: "#52c41a",
         },
-      }}
-    >
+      }} >
       <DashboardContent />
     </ConfigProvider>
   );

@@ -1,4 +1,4 @@
-// Income.jsx
+
 import React, { useState } from "react";
 import {
   Card,
@@ -13,17 +13,12 @@ import {
 } from "antd";
 import { DollarCircleOutlined, SaveOutlined } from "@ant-design/icons";
 import useFetch from "./Hooks/hookfetchdata";
-
 const { Text } = Typography;
-
 export default function Income({ onSave }) {
   const [inputAmount, setInputAmount] = useState("");
   const [description, setDescription] = useState("");
   const [selectedCat, setSelectedCat] = useState(null);
-
   const { data, loading } = useFetch("http://localhost:8080/income");
-
-  // API already returns { value, label }
   const categoryOptions = data ?? [];
 
   const handleAmountChange = (e) => {
@@ -49,12 +44,10 @@ export default function Income({ onSave }) {
       time: new Date().toLocaleTimeString(),
     };
 
-    // Guard: only call onSave if provided as a function
     if (typeof onSave === "function") {
       onSave(newEntry);
       message.success("Entry saved");
     } else {
-      // fallback: just log (prevents crash when Income rendered standalone)
       console.warn(
         "onSave not provided for Income component, entry:",
         newEntry

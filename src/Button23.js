@@ -1,4 +1,3 @@
-// Button23.js
 import { Row, Button, Col } from "antd";
 import { PlusCircleOutlined } from "@ant-design/icons";
 

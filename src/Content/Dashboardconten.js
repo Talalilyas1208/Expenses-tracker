@@ -1,23 +1,15 @@
+import { Card, Row, Col, Statistic, List, Typography, Space } from "antd";
 import {
-  Card,
-  Row,
-  Col,
-  Statistic,
-  List,
-  Typography,
-  Space,
- 
-} from "antd";
-import { CheckOutlined, DollarCircleOutlined, WalletOutlined } from "@ant-design/icons";
+  CheckOutlined,
+  DollarCircleOutlined,
+  WalletOutlined,
+} from "@ant-design/icons";
 import { useEntries } from "../EntriesContext";
 import useFetch from "../Hooks/hookfetchdata";
-
 const { Text } = Typography;
-
 function Dashboardcontent() {
   const { entries } = useEntries();
   console.log(entries, "data");
-
   const totalIncome = entries.reduce((sum, entry) => sum + entry.amount, 0);
   const recentEntries = entries.slice(-5).reverse();
   const { data } = useFetch("http://localhost:8080/Subs");
@@ -40,7 +32,6 @@ function Dashboardcontent() {
             />
           </Card>
         </Col>
-
         <Col xs={24} sm={12} lg={8}>
           <Card hoverable>
             <Statistic
@@ -52,7 +43,6 @@ function Dashboardcontent() {
           </Card>
         </Col>
       </Row>
-
       <Row gutter={[16, 16]}>
         <Col lg={8} sm={24} style={{ marginTop: "12px" }}>
           <Card title={<Text>ecent Transaction</Text>}>
@@ -123,7 +113,6 @@ function Dashboardcontent() {
             />
           </Card>
         </Col>
-
         <Col lg={8}>
           <Card title={<Text>Your money</Text>} style={{ marginTop: "10px" }}>
             <List
