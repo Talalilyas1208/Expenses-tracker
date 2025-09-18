@@ -49,7 +49,7 @@ export default function App() {
             <Button23 onClick={handleButtonClick} />
           </Header>
 
-          <Content style={{ margin: "24px 16px 0", overflow: "initial" }}>
+          <Content style={{   }}>
             <div style={{ padding: 24, background: "#0f0f0fff", minHeight: "100%" }}>
               <Outlet />
             </div>
