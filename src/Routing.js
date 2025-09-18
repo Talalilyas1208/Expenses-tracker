@@ -12,7 +12,7 @@ export default function Routing() {
     <Routes>
       <Route path="/" element={<App />}>
       
-        <Route index element={<Dashboard />} />
+        <Route path="/" element={<Dashboard />} />
         <Route path="priceupdate" element={<Priceupdate />} />
         <Route path="previoustransaction" element={<Previous />} />
         <Route path="calendar" element={<Calendar123 />} />
