@@ -59,7 +59,7 @@ export default function Income() {
   };
 
   return (
-    <Card title="Add New Income Entry">
+    <div title="Add New Income Entry">
       <Space direction="vertical" size="middle" style={{ width: "100%" }}>
         <Row gutter={16}>
           <Col lg={12} xs={24}>
@@ -112,6 +112,6 @@ export default function Income() {
           </Button>
         </Row>
       </Space>
-    </Card>
+    </div >
   );
 }

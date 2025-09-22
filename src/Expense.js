@@ -40,9 +40,7 @@ export default function Expenses({ onSave }) {
 
   const handleAmountChange = useCallback((e) => {
     setInputAmount(
-      e.target.value
-        .replace(/[^0-9.]/g, "")
-        .replace(/(\..*)\./g, "$1")
+      e.target.value.replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1")
     );
   }, []);
 
@@ -79,7 +77,9 @@ export default function Expenses({ onSave }) {
       setEntries((prev = []) => [...prev, newEntry]);
       message.success("Expense saved (fallback)");
     } else {
-      message.warning("Expense prepared but not persisted (no handler available)");
+      message.warning(
+        "Expense prepared but not persisted (no handler available)"
+      );
       console.warn("No handler to persist expense:", newEntry);
     }
 
@@ -90,7 +90,7 @@ export default function Expenses({ onSave }) {
   }, [inputAmount, description, selectedCat, addEntry, onSave, setEntries]);
 
   return (
-    <Card title="➖ Add New Expense Entry">
+    <div itle="➖ Add New Expense Entry">
       <Space direction="vertical" size="middle" style={{ width: "100%" }}>
         <Row gutter={16}>
           <Col lg={12} xs={24}>
@@ -132,19 +132,19 @@ export default function Expenses({ onSave }) {
           </Col>
         </Row>
 
-        <Row justify="center" style={{ marginTop: 16 }}>
-          <Button
-            type="primary"
-            size="large"
-            icon={<SaveOutlined />}
-            onClick={handleSaving}
-            disabled={!inputAmount}
-            danger
-          >
-            Save Expense
-          </Button>
+        <Row justify="center" style={{ marginTop: 16 ,width:"100%" }}>
+          <Col>
+            <Button
+              type="primary"
+              size="large"
+              icon={<SaveOutlined />}
+              onClick={handleSaving}
+              danger>
+              Save Expense
+            </Button>
+          </Col>
         </Row>
       </Space>
-    </Card>
+    </div>
   );
 }
