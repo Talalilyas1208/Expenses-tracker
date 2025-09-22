@@ -8,7 +8,7 @@ export default function DashboardModal({ open, onClose, onSave }) {
   const [currentView, setCurrentView] = useState("Expense");
 
   const contentMap = {
-    Expense: <Expense />,
+    Expense: <Expense onSave={onSave} />,
     Income: <Income onSave={onSave} />,
     Transfer: <Transfer />,
   };
