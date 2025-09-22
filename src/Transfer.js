@@ -1,6 +1,6 @@
-import { Row, Col, Typography, Spin,  Select } from "antd";
-
+import { Row, Col, Typography, Spin, Select } from "antd";
 import useFetch from "./Hooks/hookfetchdata";
+import { useMemo } from "react";
 
 const { Text } = Typography;
 
@@ -18,11 +18,14 @@ const Transfer = () => {
       label: cat.Bank,
     })) || [];
 
-  const amountOptions =
-    amountData?.map((d) => ({
-      value: d.select,
-      label: d.select,
-    })) || [];
+  const amountOptions = useMemo(
+    () =>
+      (amountData ?? []).map((cat) => ({
+        label: cat.catg,
+        value: cat.catg,
+      })),
+    [amountData]
+  );
 
   return (
     <>
@@ -52,7 +55,6 @@ const Transfer = () => {
           )}
         </Col>
       </Row>
-      
       <Row style={{ marginTop: "10px", marginBottom: "20px" }}>
         <Col lg={11} xs={24}>
           <Text strong>Bank</Text>
@@ -66,8 +68,7 @@ const Transfer = () => {
             />
           )}
         </Col>
-        </Row>
-    
+      </Row>
     </>
   );
 };
