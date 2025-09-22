@@ -1,5 +1,5 @@
 // App.js
-import  { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Layout } from "antd";
 import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
@@ -25,31 +25,30 @@ export default function App() {
     setIsModalOpen(true);
   };
 
-  const handleSave = (newEntry) => {
+  // ✅ define addEntry here
+  const addEntry = (newEntry) => {
     setEntries((prev) => [...prev, newEntry]);
     setIsModalOpen(false);
   };
 
   return (
-    <EntriesContext.Provider value={{ entries, setEntries }}>
-      <Layout style={{ minHeight: "100vh" ,}}  >
+    <EntriesContext.Provider value={{ entries, setEntries, addEntry }}>
+      <Layout style={{ minHeight: "100vh" }}>
         <Sidebar />
         <Layout>
           <Header
             style={{
               background: "#0a0a0aff",
-          
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
             }}
           >
             <div className="logo" />
-
             <Button23 onClick={handleButtonClick} />
           </Header>
 
-          <Content style={{   }}>
+          <Content>
             <div style={{ padding: 24, background: "#0f0f0fff", minHeight: "100%" }}>
               <Outlet />
             </div>
@@ -59,7 +58,6 @@ export default function App() {
         <DashboardModal
           open={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          onSave={handleSave}
         />
       </Layout>
     </EntriesContext.Provider>
