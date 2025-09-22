@@ -10,7 +10,9 @@ const { Text } = Typography;
 function Dashboardcontent() {
   const { entries } = useEntries();
   console.log(entries, "data");
-  const totalIncome = entries.reduce((sum, entry) => sum + entry.amount, 0);
+const totalIncome = entries.reduce((sum, entry) => sum + entry.amount, 0);
+
+
   const recentEntries = entries.slice(-5).reverse();
   const { data } = useFetch("http://localhost:8080/Subs");
 
@@ -42,10 +44,10 @@ function Dashboardcontent() {
             />
           </Card>
         </Col>
-      </Row>
+      </Row> 
       <Row gutter={[16, 16]}>
         <Col lg={8} sm={24} style={{ marginTop: "12px" }}>
-          <Card title={<Text>ecent Transaction</Text>}>
+          <Card title={<Text>Recent Transaction</Text>}>
             {entries.length === 0 ? (
               <Text type="secondary">
                 No income entries yet. Click "Add Transaction" to start!
