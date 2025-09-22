@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import {
   Card,
@@ -13,11 +12,16 @@ import {
 } from "antd";
 import { DollarCircleOutlined, SaveOutlined } from "@ant-design/icons";
 import useFetch from "./Hooks/hookfetchdata";
+import { useEntries } from "./EntriesContext"; 
+
 const { Text } = Typography;
-export default function Income({ onSave }) {
+
+export default function Income() {
+  const { addEntry } = useEntries(); 
   const [inputAmount, setInputAmount] = useState("");
   const [description, setDescription] = useState("");
   const [selectedCat, setSelectedCat] = useState(null);
+
   const { data, loading } = useFetch("http://localhost:8080/income");
   const categoryOptions = data ?? [];
 
@@ -37,24 +41,18 @@ export default function Income({ onSave }) {
 
     const newEntry = {
       id: Date.now(),
-      amount: value,
+      amount: Math.abs(value), // ✅ always positive for income
       description: description || "No description",
       category: selectedCat || "Uncategorized",
       date: new Date().toLocaleDateString(),
       time: new Date().toLocaleTimeString(),
+      type: "income", // ✅ label it
     };
 
-    if (typeof onSave === "function") {
-      onSave(newEntry);
-      message.success("Entry saved");
-    } else {
-      console.warn(
-        "onSave not provided for Income component, entry:",
-        newEntry
-      );
-      message.info("onSave not wired — entry logged to console.");
-    }
+    addEntry(newEntry); // ✅ push into global entries
+    message.success("Income entry saved");
 
+    // reset fields
     setInputAmount("");
     setDescription("");
     setSelectedCat(null);
