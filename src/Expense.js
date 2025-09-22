@@ -1,150 +1,150 @@
+// Expenses.js
+import React, { useState, useMemo, useCallback } from "react";
+import {
+  Card,
+  Row,
+  Col,
+  Typography,
+  Button,
+  Input,
+  Select,
+  Space,
+  message,
+} from "antd";
+import { DollarCircleOutlined, SaveOutlined } from "@ant-design/icons";
+import useFetch from "./Hooks/hookfetchdata";
+import { useEntries } from "./EntriesContext"; // use the hook you already have
 
-  import { Row, Col, Typography, Spin, Modal, notification } from "antd";
-  import { useState } from "react";
-  import InputField from "./Compenets/Input";
-  import Selected from "./Compenets/Select";
-  import useFetch from "./Hooks/hookfetchdata";
-  import Calendar123 from "./Compenets/Calendar123";
-  import Buttons from "./Compenets/Buttons";
-  import { CalendarOutlined } from '@ant-design/icons';
-  const { Text } = Typography;
+const { Text } = Typography;
 
-  export default function Expense() {
-    const [selectedCat, setSelectedCat] = useState(null);
-    const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-    const [amount, setAmount] = useState("");
-    const [description, setDescription] = useState("");
-    const [day, setday] = useState(null);
+export default function Expenses({ onSave }) {
+  const [inputAmount, setInputAmount] = useState("");
+  const [description, setDescription] = useState("");
+  const [selectedCat, setSelectedCat] = useState(null);
 
-    const { data: catData, loading: catLoading } = useFetch(
-      "http://localhost:8080/catg"
-    );
-    const { data: dayData, loading: dayLoading } = useFetch(
-      "http://localhost:8080/day"
-    );
+  // Prefer context API if available
+  const { addEntry, setEntries } = useEntries() ?? {};
 
+  // fetch categories
+  const { data, loading } = useFetch("http://localhost:8080/catg");
 
-    const categoryOptions =
-      catData?.map((cat) => ({
+  // memoize options so we don't remap every render
+  const categoryOptions = useMemo(
+    () =>
+      (data ?? []).map((cat) => ({
+        label: cat.catg,
         value: cat.catg,
-      })) || [];
-    const dayOption =
-      dayData?.map((d) => ({
-        value: d.day,
-        label: d.day,
-      })) || [];
+      })),
+    [data]
+  );
 
-    const handleCalendarClick = () => {
-      setIsCalendarOpen(true);
+  const handleAmountChange = useCallback((e) => {
+    setInputAmount(
+      e.target.value
+        .replace(/[^0-9.]/g, "")
+        .replace(/(\..*)\./g, "$1")
+    );
+  }, []);
+
+  const handleSaving = useCallback(() => {
+    const value = Number(inputAmount); // clear numeric coercion
+    if (!(value > 0)) {
+      message.error("Enter a valid amount > 0");
+      return;
+    }
+
+    // ensure negative numeric amount for expenses
+    const negativeAmount = -Math.abs(value);
+
+    const newEntry = {
+      id: Date.now(),
+      amount: negativeAmount,
+      description: description?.trim() || "No description",
+      category: selectedCat ?? "Uncategorized",
+      date: new Date().toLocaleDateString(),
+      time: new Date().toLocaleTimeString(),
+      type: "expense",
     };
 
-    const handleDateSelect = (date) => {
-      setday(date.format("YYYY-MM-DD"));
-      setIsCalendarOpen(false);
-    };
+    console.debug("Saving expense:", newEntry);
 
-    const handleSave = async () => {
-      if (!amount || !description || !selectedCat || !day) {
-        notification.error({
-          message: "Validation Error",
-          description: "Please fill in all the required fields.",
-        });
-        return;
-      }
+    // Preferred order: context helper (addEntry) -> parent onSave -> direct setEntries fallback
+    if (typeof addEntry === "function") {
+      addEntry(newEntry);
+      message.success("Expense saved");
+    } else if (typeof onSave === "function") {
+      onSave(newEntry);
+      message.success("Expense saved");
+    } else if (typeof setEntries === "function") {
+      setEntries((prev = []) => [...prev, newEntry]);
+      message.success("Expense saved (fallback)");
+    } else {
+      message.warning("Expense prepared but not persisted (no handler available)");
+      console.warn("No handler to persist expense:", newEntry);
+    }
 
-      const expenseData = {
-        amount,
-        description,
-        category: selectedCat,
-        date: day,
-      };
+    // ----- CORRECT RESET: explicit and readable -----
+    setInputAmount("");
+    setDescription("");
+    setSelectedCat(null);
+  }, [inputAmount, description, selectedCat, addEntry, onSave, setEntries]);
 
-     
-        setAmount("");
-        setDescription("");
-        setSelectedCat(null);
-        setday(null);
-        
-
-    };
-
-    return (
-      <>
-        <h3>Expense Form</h3>
-
+  return (
+    <Card title="➖ Add New Expense Entry">
+      <Space direction="vertical" size="middle" style={{ width: "100%" }}>
         <Row gutter={16}>
           <Col lg={12} xs={24}>
-            <Text strong>Amount</Text>
-            <InputField
-              type="number"
-              placeholder="0.00 USD"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
+            <Text strong>Amount *</Text>
+            <Input
+              size="large"
+              type="text"
+              placeholder="Enter amount"
+              value={inputAmount}
+              onChange={handleAmountChange}
+              prefix={<DollarCircleOutlined style={{ color: "red" }} />}
             />
           </Col>
+
           <Col lg={12} xs={24}>
             <Text strong>Description</Text>
-            <InputField
-              placeholder="Bought a new iPhone"
+            <Input
+              size="large"
+              placeholder="e.g., Food, Rent"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
           </Col>
         </Row>
 
-        <Text strong>Category</Text>
-        <Row style={{ marginTop: "10px", marginBottom: "20px" }}>
-          <Col lg={24} xs={24}>
-            {catLoading ? (
-              <Spin />
-            ) : (
-              <Selected
-                options={categoryOptions}
-                value={selectedCat}
-                onChange={(val) => setSelectedCat(val)}
-                placeholder="Select category"
-              />
-            )}
+        <Row>
+          <Col lg={12} xs={24}>
+            <Text strong>Category</Text>
+            <Select
+              size="large"
+              options={categoryOptions}
+              value={selectedCat}
+              onChange={setSelectedCat}
+              placeholder="Select expense category"
+              style={{ width: "100%" }}
+              allowClear
+              loading={loading}
+            />
           </Col>
         </Row>
 
-        <Row justify="space-between" align="middle">
-          <Col lg={18} xs={24}>
-            <Text strong>Day</Text>
-            {dayLoading ? (
-              <Spin />
-            ) : (
-              <Selected
-                options={dayOption}
-                value={day}
-                onChange={(val) => setday(val)}
-                placeholder="Select a day"
-              />
-            )}
-          </Col>
-          <Col lg={6} xs={24} style={{ marginTop: "20px" }}>
-            <Buttons onClick={handleCalendarClick}>    <CalendarOutlined /></Buttons>
-          </Col>
-        </Row>
-
-        {isCalendarOpen && (
-          <Modal
-            title="Select a Date"
-            open={isCalendarOpen}
-            onCancel={() => setIsCalendarOpen(false)}
-            footer={null}
+        <Row justify="center" style={{ marginTop: 16 }}>
+          <Button
+            type="primary"
+            size="large"
+            icon={<SaveOutlined />}
+            onClick={handleSaving}
+            disabled={!inputAmount}
+            danger
           >
-            <Calendar123 onSelect={handleDateSelect} />
-          </Modal>
-        )}
-
-        <Row justify="end" style={{ marginTop: "20px" }}>
-          <Col>
-            <Buttons type="primary" onClick={handleSave}>
-              Save
-            </Buttons>  
-          </Col>
+            Save Expense
+          </Button>
         </Row>
-      </>
-    );
-  }
+      </Space>
+    </Card>
+  );
+}
