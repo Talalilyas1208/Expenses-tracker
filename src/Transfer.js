@@ -1,7 +1,8 @@
-import { Row, Col, Typography, Spin, Select,Input } from "antd";
+import { Row, Col, Typography, Spin, Select,Input, Button } from "antd";
 import useFetch from "./Hooks/hookfetchdata";
-import { useMemo } from "react";
-
+import { useMemo, useState } from "react";
+import Buttons from "./Compenets/Buttons";
+import { SaveOutlined,DollarCircleOutlined ,ArrowRightOutlined} from "@ant-design/icons";
 const { Text } = Typography;
 
 const Transfer = () => {
@@ -11,13 +12,24 @@ const Transfer = () => {
   const { data: amountData, loading: amountLoading } = useFetch(
     "http://localhost:8080/amount"
   );
-
+const [inputAmount,setInputAmount] =useState()
+const [sendamount , setsendamount] =useState()
   const transferOptions =
     transferData?.map((cat) => ({
       value: cat.Bank,
       label: cat.Bank,
     })) || [];
-
+  const handleAmountChange = (e) => {
+    const val = e.target.value
+      .replace(/[^0-9.]/g, "")
+      .replace(/(\..*)\./g, "$1");
+    setInputAmount(val);
+  }; const handleAmountChanges = (e) => {
+    const value = e.target.value
+      .replace(/[^0-9.]/g, "")
+      .replace(/(\..*)\./g, "$1");
+    setsendamount(value);
+  };
   const amountOptions = useMemo(
     () =>
       (amountData ?? []).map((cat) => ({
@@ -42,7 +54,13 @@ const Transfer = () => {
             />
           )}
         </Col>
-       <Col lg={11} xs={24} offset={1}>
+        <Row>
+        <Col lg={1} xs={4} >
+          <ArrowRightOutlined />
+        
+        </Col>
+    </Row>
+       <Col lg={11} xs={24} >
           <Text strong>to</Text>
           {transferLoading ? (
             <Spin />
@@ -60,11 +78,13 @@ const Transfer = () => {
          <Col lg={11} xs={24} >
       
             <Text strong>Amount</Text>
-            <Input
+             <Input
               size="large"
-                 placeholder="0.00"
-              // value={description}
-              // onChange={(e) => setDescription(e.target.value)}
+              type="text"
+              placeholder="Enter amount"
+              value={inputAmount}
+              onChange={handleAmountChange}
+              prefix={<DollarCircleOutlined style={{ color: "#52c41a" }} />}
             />
          
         </Col>
@@ -73,11 +93,12 @@ const Transfer = () => {
             <Text strong>Amount</Text>
             <Input
               size="large"
-              placeholder="0.00"
-              // value={description}
-              // onChange={(e) => setDescription(e.target.value)}
+              type="text"
+              placeholder="Enter amount"
+              value={sendamount}
+              onChange={handleAmountChanges}
+              prefix={<DollarCircleOutlined style={{ color: "#52c41a" }} />}
             />
-         
         </Col>
       </Row>
       <Row>
@@ -95,6 +116,15 @@ const Transfer = () => {
          
         </Col>
   
+      </Row>
+      <Row justify={"center"} style={{margin:"10px"}}>
+       <Col>
+      <Buttons
+        icon={<SaveOutlined />}
+        text= {"Save"}
+      size= "large"
+        />
+      </Col>
       </Row>
     </>
   );
