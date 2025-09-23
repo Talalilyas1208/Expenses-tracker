@@ -44,6 +44,16 @@ const totalIncome = entries.reduce((sum, entry) => sum + entry.amount, 0);
             />
           </Card>
         </Col>
+         <Col xs={24} sm={12} lg={8}>
+          <Card hoverable>
+            <Statistic
+              title={<Text>Transfer Histroy</Text>}
+          
+              valueStyle={{ color: "#1890ff" }}
+              prefix={<WalletOutlined />}
+            />
+          </Card>
+        </Col>
       </Row> 
       <Row gutter={[16, 16]}>
         <Col lg={8} sm={24} style={{ marginTop: "12px" }}>
