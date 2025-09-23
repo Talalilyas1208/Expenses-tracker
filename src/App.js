@@ -1,38 +1,23 @@
 // App.js
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Layout } from "antd";
 import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Button23 from "./Button23";
 import DashboardModal from "./DashboardModal";
-import { EntriesContext } from "./EntriesContext";
+import { EntriesProvider } from "./EntriesContext";
 
 const { Header, Content } = Layout;
 
 export default function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [entries, setEntries] = useState(() => {
-    const saved = localStorage.getItem("incomeEntries");
-    return saved ? JSON.parse(saved) : [];
-  });
-
-  useEffect(() => {
-    localStorage.setItem("incomeEntries", JSON.stringify(entries));
-  }, [entries]);
-
   const handleButtonClick = () => {
     setIsModalOpen(true);
   };
 
-  // ✅ define addEntry here
-  const addEntry = (newEntry) => {
-    setEntries((prev) => [...prev, newEntry]);
-    setIsModalOpen(false);
-  };
-
   return (
-    <EntriesContext.Provider value={{ entries, setEntries, addEntry }}>
+    <EntriesProvider>
       <Layout style={{ minHeight: "100vh" }}>
         <Sidebar />
         <Layout>
@@ -49,7 +34,13 @@ export default function App() {
           </Header>
 
           <Content>
-            <div style={{ padding: 24, background: "#0f0f0fff", minHeight: "100%" }}>
+            <div
+              style={{
+                padding: 24,
+                background: "#0f0f0fff",
+                minHeight: "100%",
+              }}
+            >
               <Outlet />
             </div>
           </Content>
@@ -60,6 +51,6 @@ export default function App() {
           onClose={() => setIsModalOpen(false)}
         />
       </Layout>
-    </EntriesContext.Provider>
+    </EntriesProvider>
   );
 }
