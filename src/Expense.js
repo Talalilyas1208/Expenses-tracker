@@ -45,13 +45,13 @@ export default function Expenses({ onSave }) {
   }, []);
 
   const handleSaving = useCallback(() => {
-    const value = Number(inputAmount); // clear numeric coercion
+    const value = Number(inputAmount);
     if (!(value > 0)) {
       message.error("Enter a valid amount > 0");
       return;
     }
 
-    // ensure negative numeric amount for expenses
+    
     const negativeAmount = -Math.abs(value);
 
     const newEntry = {
@@ -66,7 +66,7 @@ export default function Expenses({ onSave }) {
 
     console.debug("Saving expense:", newEntry);
 
-    // Preferred order: context helper (addEntry) -> parent onSave -> direct setEntries fallback
+  
     if (typeof addEntry === "function") {
       addEntry(newEntry);
       message.success("Expense saved");
@@ -83,7 +83,7 @@ export default function Expenses({ onSave }) {
       console.warn("No handler to persist expense:", newEntry);
     }
 
-    // ----- CORRECT RESET: explicit and readable -----
+  
     setInputAmount("");
     setDescription("");
     setSelectedCat(null);

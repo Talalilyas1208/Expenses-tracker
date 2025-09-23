@@ -15,7 +15,6 @@ import useFetch from "./Hooks/hookfetchdata";
 import { useEntries } from "./EntriesContext"; 
 
 const { Text } = Typography;
-
 export default function Income() {
   const { addEntry } = useEntries(); 
   const [inputAmount, setInputAmount] = useState("");
@@ -41,18 +40,16 @@ export default function Income() {
 
     const newEntry = {
       id: Date.now(),
-      amount: Math.abs(value), // ✅ always positive for income
+      amount: Math.abs(value),
       description: description || "No description",
       category: selectedCat || "Uncategorized",
       date: new Date().toLocaleDateString(),
       time: new Date().toLocaleTimeString(),
-      type: "income", // ✅ label it
+      type: "income",
     };
 
-    addEntry(newEntry); // ✅ push into global entries
+    addEntry(newEntry); 
     message.success("Income entry saved");
-
-    // reset fields
     setInputAmount("");
     setDescription("");
     setSelectedCat(null);
