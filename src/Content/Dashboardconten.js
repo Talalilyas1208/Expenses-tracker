@@ -110,7 +110,7 @@ function Dashboardcontent() {
         </Col>
 
         {/* Recent Transfers */}
-        <Col lg={8} sm={24} style={{ marginTop: "12px" }}>
+        <Col lg={8} sm={24} xs ={24}style={{ marginTop: "12px" }}>
           <Card title={<Text>Recent Transfers</Text>}>
             {transfers.length === 0 ? (
               <Text type="secondary">No transfers yet.</Text>
