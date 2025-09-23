@@ -6,7 +6,7 @@ import { SaveOutlined} from "@ant-design/icons";
 
 export default function Buttons({...props}) {
  
-const {size,text ,icon} = {...props}
+const {size,text ,icon ,handlesave} = {...props}
 
 
 
@@ -15,7 +15,7 @@ const {size,text ,icon} = {...props}
     return (
 
 
-      <Button size={size} style={{width:"100%"}} icon={icon}>
+      <Button size={size} style={{width:"100%"}} icon={icon} onClick={handlesave}>
         {text}
       </Button>
     )
