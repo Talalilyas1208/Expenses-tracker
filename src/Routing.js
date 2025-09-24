@@ -7,6 +7,8 @@ import Previous from "./Previous";
 import Calendar123 from "./Compenets/Calendar123";
 
 import Wallets from "./Wallets";
+import Settingsidebar from "./Settingsidebar";
+import Categories from "./Categories";
 export default function Routing() {
   return (
     <Routes>
@@ -17,6 +19,8 @@ export default function Routing() {
         <Route path="previoustransaction" element={<Previous />} />
         <Route path="calendar" element={<Calendar123 />} />
         <Route path="Wallets" element= { <Wallets/>} />
+        <Route path="settings" element= {<Settingsidebar/>}/>
+           <Route path="categories" element= {<Categories/>}/>
       </Route>
     </Routes>
   );
