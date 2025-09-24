@@ -1,8 +1,8 @@
-export default  function Categories () {
+export default  function categories () {
 
 
 
 
 
-
+    
 }

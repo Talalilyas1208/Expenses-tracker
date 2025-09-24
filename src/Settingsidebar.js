@@ -11,7 +11,7 @@ return(
         <h2>
 
 
-            hello taallall
+            hello
         </h2>
     </div>
 )
