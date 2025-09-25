@@ -1,19 +1,17 @@
-export default function Settingsidebar () {
+import { Row, Col, Card, Typography, ConfigProvider, Button, Space } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 
+export default function Settingsidebar() {
+  const { Text } = Typography;
 
-return(
+  const handleAddClick = () => {
+    console.log("Plus button clicked!");
+   
+  };
 
-
+  return (
     <div>
-
-
-
-        <h2>
-
-
-            hello
-        </h2>
+      
     </div>
-)
-    
+  );
 }
