@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   AppstoreOutlined,
   ShopOutlined,
@@ -18,8 +18,6 @@ const Sidebar = () => {
   const { data, loading } = useFetch("http://localhost:8080/sidebar");
   const navigate = useNavigate();
 
-  
-
   const iconMap = {
     UserOutlined: <UserOutlined />,
     VideoCameraOutlined: <VideoCameraOutlined />,
@@ -35,11 +33,10 @@ const Sidebar = () => {
       key: item.key,
       icon: iconMap[item.icon] || <AppstoreOutlined />,
       label: item.label,
-      onClick: () => navigate(item.path), 
+      onClick: () => navigate(item.path),
     })) || [];
 
   return (
-
     <Sider
       style={{ background: "#000000" }}
       collapsible
@@ -47,8 +44,6 @@ const Sidebar = () => {
       onCollapse={(value) => setCollapsed(value)}
       breakpoint="lg"
     >
-    
-
       {!collapsed && (
         <div
           className="flex items-center justify-center h-16 text-white text-2xl font-semibold"
