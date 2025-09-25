@@ -13,7 +13,7 @@ import {
 } from "antd";
 import { DollarCircleOutlined, SaveOutlined } from "@ant-design/icons";
 import useFetch from "./Hooks/hookfetchdata";
-import { useEntries } from "./EntriesContext"; // use the hook you already have
+import { useEntries } from "./EntriesContext";
 
 const { Text } = Typography;
 
