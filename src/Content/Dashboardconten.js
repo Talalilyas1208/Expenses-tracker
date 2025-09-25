@@ -24,7 +24,7 @@ function Dashboardcontent() {
 
   return (
     <div style={{ padding: "20px" }}>
-      <Text style={{ fontSize: "24px", marginBottom: "20px" }}>Dashboard</Text>
+      <Text style={{ fontSize: "24px", marginBottom: "20px" }}>Dashboard</Text> 
 
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={12} lg={8}>
@@ -61,7 +61,7 @@ function Dashboardcontent() {
       </Row>
 
       <Row gutter={[16, 16]}>
-        {/* Recent Transactions */}
+      
         <Col lg={8} sm={24} style={{ marginTop: "12px" }}>
           <Card title={<Text>Recent Transaction</Text>}>
             {entries.length === 0 ? (
@@ -108,9 +108,7 @@ function Dashboardcontent() {
             )}
           </Card>
         </Col>
-
-        {/* Recent Transfers */}
-        <Col lg={8} sm={24} xs ={24}style={{ marginTop: "12px" }}>
+        <Col lg={8} sm={24} xs={24} style={{ marginTop: "12px" }}>
           <Card title={<Text>Recent Transfers</Text>}>
             {transfers.length === 0 ? (
               <Text type="secondary">No transfers yet.</Text>
@@ -124,14 +122,16 @@ function Dashboardcontent() {
                         title={
                           <Space>
                             <Text strong style={{ color: "#fa8c16" }}>
-                              ${item. inputAmount.toFixed(2)}
+                              ${item.inputAmount.toFixed(2)}
                             </Text>
                             <Text>- {item.description}</Text>
                           </Space>
                         }
                         description={
                           <Space>
-                            <Text>{item.from} ➝ {item.to}</Text>
+                            <Text>
+                              {item.from} ➝ {item.to}
+                            </Text>
                             <Text type="secondary">•</Text>
                             <Text>
                               {item.date} {item.time}
@@ -155,8 +155,7 @@ function Dashboardcontent() {
           </Card>
         </Col>
 
-        {/* Subscriptions / Your Money */}
-        <Col lg={8}>
+        <Col lg={8} xs={24}>
           <Card title={<Text>Your money</Text>} style={{ marginTop: "10px" }}>
             <List
               dataSource={categoryOptions}
