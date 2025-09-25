@@ -10,8 +10,15 @@ export default function Dashboard() {
           colorTextSecondary: "#bfbfbf",
           colorPrimary: "#52c41a",
         },
+        components: {
+          Card: {
+            colorBorderSecondary: "#434343",
+            colorBorder: "#434343",
+          },
+        },
       }} >
       <DashboardContent />
+
     </ConfigProvider>
   );
 }
