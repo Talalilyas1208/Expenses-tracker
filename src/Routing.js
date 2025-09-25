@@ -5,7 +5,6 @@ import Dashboard from "./Dashboard";
 import Priceupdate from "./Priceupdate";
 import Previous from "./Previous";
 import Calendar123 from "./Compenets/Calendar123";
-
 import Wallets from "./Wallets";
 import Settingsidebar from "./Settingsidebar";
 import Categories from "./Categories";
@@ -13,14 +12,13 @@ export default function Routing() {
   return (
     <Routes>
       <Route path="/" element={<App />}>
-      
         <Route path="/" element={<Dashboard />} />
         <Route path="priceupdate" element={<Priceupdate />} />
         <Route path="previoustransaction" element={<Previous />} />
         <Route path="calendar" element={<Calendar123 />} />
-        <Route path="Wallets" element= { <Wallets/>} />
-        <Route path="settings" element= {<Settingsidebar/>}/>
-           <Route path="categories" element= {<Categories/>}/>
+        <Route path="Wallets" element={<Wallets />} />
+        <Route path="settings" element={<Settingsidebar />} />
+        <Route path="categories" element={<Categories />} />
       </Route>
     </Routes>
   );
