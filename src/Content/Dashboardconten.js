@@ -7,21 +7,16 @@ import {
 } from "@ant-design/icons";
 import { useEntries } from "../EntriesContext";
 import useFetch from "../Hooks/hookfetchdata";
-
 const { Text } = Typography;
 
 function Dashboardcontent() {
   const { entries, transfers } = useEntries();
   console.log(entries, "data");
-
   const totalIncome = entries.reduce((sum, entry) => sum + entry.amount, 0);
-
   const recentEntries = entries.slice(-5).reverse();
   const recentTransfers = transfers.slice(-5).reverse();
-
   const { data } = useFetch("http://localhost:8080/Subs");
   const categoryOptions = data ?? [];
-
   return (
     <div style={{ padding: "20px" }}>
       <Text style={{ fontSize: "24px", marginBottom: "20px" }}>Dashboard</Text> 

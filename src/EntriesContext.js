@@ -1,10 +1,9 @@
-// EntriesContext.js
-import React, { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 
 export const EntriesContext = createContext();
 
 export function EntriesProvider({ children }) {
-  // ✅ Income entries
+
   const [entries, setEntries] = useState(() => {
     const saved = localStorage.getItem("incomeEntries");
     return saved ? JSON.parse(saved) : [];
@@ -18,7 +17,6 @@ export function EntriesProvider({ children }) {
     setEntries((prev) => [...prev, newEntry]);
   };
 
-  // ✅ Transfer entries
   const [transfers, setTransfers] = useState(() => {
     const saved = localStorage.getItem("transferEntries");
     return saved ? JSON.parse(saved) : [];
@@ -46,5 +44,4 @@ export function EntriesProvider({ children }) {
   );
 }
 
-// ✅ Custom hook for easy usage
 export const useEntries = () => useContext(EntriesContext);
