@@ -10,12 +10,10 @@ import {
 } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useEntries } from "./EntriesContext";
-
 export default function Categories() {
   const { Text } = Typography;
   const { entries } = useEntries();
 
-  // category limits
   const LIMITS = {
     Food: 1000,
     Rent: 2000,
@@ -24,7 +22,6 @@ export default function Categories() {
     Apartment: 3000,
   };
 
-  // make an object to hold totals
   let categoryTotals = {};
 
   for (let i = 0; i < entries.length; i++) {
@@ -40,7 +37,6 @@ export default function Categories() {
     }
   }
 
-  // check limits and log if reached
   for (let cat in LIMITS) {
     if (categoryTotals[cat] >= LIMITS[cat]) {
       console.log(`⚠️ Limit reached for ${cat} (total = ${categoryTotals[cat]})`);
@@ -90,7 +86,7 @@ export default function Categories() {
               />
             </Space>
 
-            {/* Progress bars */}
+        
             <div style={{ marginTop: 16 }}>
               {Object.keys(LIMITS).map((cat) => {
                 const spent = categoryTotals[cat] || 0;

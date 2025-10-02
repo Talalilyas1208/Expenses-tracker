@@ -1,4 +1,4 @@
-// Expenses.js
+
 import React, { useState, useMemo, useCallback } from "react";
 import {
   Card,
@@ -14,20 +14,14 @@ import {
 import { DollarCircleOutlined, SaveOutlined } from "@ant-design/icons";
 import useFetch from "./Hooks/hookfetchdata";
 import { useEntries } from "./EntriesContext";
-
 const { Text } = Typography;
 
 export default function Expenses({ onSave }) {
   const [inputAmount, setInputAmount] = useState("");
   const [description, setDescription] = useState("");
   const [selectedCat, setSelectedCat] = useState(null);
-
   const { addEntry, setEntries } = useEntries() ?? {};
-
-  // fetch categories
   const { data, loading } = useFetch("http://localhost:8080/catg");
-
-  // memoize options so we don't remap every render
   const categoryOptions = useMemo(
     () =>
       (data ?? []).map((cat) => ({
