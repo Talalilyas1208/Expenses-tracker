@@ -22,10 +22,13 @@ export default function Expenses({ onSave }) {
   const [description, setDescription] = useState("");
   const [selectedCat, setSelectedCat] = useState(null);
 
+  // Prefer context API if available
   const { addEntry, setEntries } = useEntries() ?? {};
 
+  // fetch categories
   const { data, loading } = useFetch("http://localhost:8080/catg");
 
+  // memoize options so we don't remap every render
   const categoryOptions = useMemo(
     () =>
       (data ?? []).map((cat) => ({
