@@ -22,7 +22,6 @@ export default function Expenses({ onSave }) {
   const [description, setDescription] = useState("");
   const [selectedCat, setSelectedCat] = useState(null);
 
-  // Prefer context API if available
   const { addEntry, setEntries } = useEntries() ?? {};
 
   // fetch categories
