@@ -10,6 +10,7 @@ import {
 } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useEntries } from "./EntriesContext";
+
 export default function Categories() {
   const { Text } = Typography;
   const { entries } = useEntries();
@@ -64,7 +65,7 @@ export default function Categories() {
         },
       }}
     >
-      <Row>
+      <Row gutter={[16, 16]}>
         <Col lg={8} xs={24}>
           <Card>
             <Space
@@ -76,7 +77,7 @@ export default function Categories() {
               }}
             >
               <Text style={{ color: "rgba(255,255,255,0.6)" }}>
-                Limits by categories
+                Limits by Categories
               </Text>
               <Button
                 type="text"
@@ -86,25 +87,54 @@ export default function Categories() {
               />
             </Space>
 
-        
-            <div style={{ marginTop: 16 }}>
+            <div
+              style={{
+                marginTop: 20,
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))",
+                gap: "20px",
+                justifyItems: "center",
+              }}
+            >
               {Object.keys(LIMITS).map((cat) => {
                 const spent = categoryTotals[cat] || 0;
                 const limit = LIMITS[cat];
                 const percent = Math.min((spent / limit) * 100, 100);
 
                 return (
-                  <div key={cat} style={{ marginBottom: 12 }}>
-                    <Text style={{ color: "white" }}>
-                      {cat}: {spent}/{limit}
-                    </Text>
+                  <div
+                    key={cat}
+                    style={{
+                      textAlign: "center",
+                      color: "white",
+                    }}
+                  >
                     <Progress
+                      type="circle"
                       percent={percent}
+                      width={90}
+                      format={() => (
+                        <div style={{ color: "white", fontSize: 12 }}>
+                          <div>{cat}</div>
+                          <div style={{ fontWeight: "bold" }}>
+                            {Math.round(percent)}%
+                          </div>
+                        </div>
+                      )}
                       status={spent >= limit ? "exception" : "active"}
                       strokeColor={spent >= limit ? "red" : "#52c41a"}
                       trailColor="#434343"
-                      showInfo={false}
                     />
+                    <Text
+                      style={{
+                        display: "block",
+                        marginTop: 8,
+                        fontSize: 12,
+                        color: "rgba(255,255,255,0.7)",
+                      }}
+                    >
+                      {spent}/{limit}
+                    </Text>
                   </div>
                 );
               })}
