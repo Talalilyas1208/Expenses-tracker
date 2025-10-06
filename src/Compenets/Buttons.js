@@ -1,7 +1,4 @@
 import { Button } from "antd";
-
-
-
 export default function Buttons({ ...props }) {
   const { size, text, icon, handlesave } = { ...props };
 
